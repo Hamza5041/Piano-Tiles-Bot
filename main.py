@@ -8,7 +8,7 @@ import cv2
 
 rgb = 0 #0 for red, 1 for green, 2 for blue
 num_tiles = 4
-screen_width, screen_height = pyautogui.size()
+
 
 def capture_screen(region = None):
     """
@@ -41,6 +41,24 @@ def detect_black_tiles(screen, tolerance=10):
     return list(zip(positions[1], positions[0]))
 
 
+
+def get_height(region, tolerance=10):
+    screen = capture_screen(region)
+
+    # Define the RGB range for black tiles
+    lower_bound = np.array([0, 0, 0])  # Pure black
+    upper_bound = np.array([tolerance, tolerance, tolerance])  # Close to black
+
+    # Scan y-coordinates row by row
+    for y in range(region[1], region[3]):  # Loop through y range
+        row = screen[y - region[1], :, :]  # Get the current row (subtract region start y)
+        mask = cv2.inRange(row, lower_bound, upper_bound)  # Create a mask for the row
+        if np.any(mask):  # If any black pixels are found in the row
+            return y  # Return the y-coordinate of the first black tile
+
+    return -1  # Return -1 if no black tiles are found
+
+
 def get_column_positions(num_tiles, screen_width):
     """
     Dynamically calculates the position of the tiles on x0-axis in case screen resolution changes.
@@ -71,31 +89,38 @@ def hold_left_click(x, y):
         time.sleep(0.001)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
 
+
 def piano_ai():
-    while not keyboard.is_pressed('q'):
-        # if color_checker(600, height):
-        #     click(600, height)
-        # elif color_checker(760, height):
-        #     click(760, height)q
-        # elif color_checker(920, height):
-        #     click(920, height)
-        # elif color_checker(1080, height):
-        #     click(1080, height)
+    screen_width, screen_height = pyautogui.size()
+    columns = get_column_positions(num_tiles, screen_width)
+    heightRegion = (0, 300, screen_width, 600)
 
-        # if keyboard.is_pressed('q') == True:
-        #     break
+    tileHeight = get_height(heightRegion)
 
-        if color_checker(600, height):
-            hold_left_click(600, height)
-        elif color_checker(760, height):
-            hold_left_click(760, height)
-        elif color_checker(920, height):
-            hold_left_click(920, height)
-        elif color_checker(1080, height):
-            hold_left_click(1080, height)
+    if tileHeight == -1:
+        print("No black tiles found in region.")
+        return
 
-keyboard.add_hotkey('a', piano_ai)
-keyboard.add_hotkey('s', piano_ai)
-keyboard.add_hotkey('d', piano_ai)
-keyboard.add_hotkey('f', piano_ai)
-keyboard.wait('q')
+    # print the region where black tiles were found
+    print(f"Tile height detected at: {tileHeight}")
+
+    region = (0, tileHeight - 50, screen_width, tileHeight + 50)  # Screen capture region around the detected height
+
+    print("Piano AI is running! Press 'q' to stop.")
+
+    while not keyboard.is_pressed('q'):  # Stop the AI if 'q' is pressed
+        # Capture a region of the screen where keys are expected to appear
+        screen = capture_screen(region)
+
+        # Loop through each column, check for tiles, and click if found
+        for x in columns:
+            tile_found = color_checker(x, tileHeight, rgb_channel=rgb)
+            if tile_found:
+                click(x, tileHeight)
+        time.sleep(0.001)  # Add a small delay to prevent excessive CPU usage
+
+    print("Piano AI stopped!")
+
+
+
+
