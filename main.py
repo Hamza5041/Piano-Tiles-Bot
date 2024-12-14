@@ -6,6 +6,24 @@ import pyautogui
 height = 400
 rgb = 0 #0 for red, 1 for green, 2 for blue
 
+
+def capture_screen(region = None):
+    """
+    Capture a screenshot of the entire screen or a specific region and return it as a NumPy array.
+
+    This function utilizes the `ImageGrab` module to capture the screen and converts the captured
+    image into a NumPy array for further processing.
+
+    :param region: A tuple defining the bounding box of the region to capture (left, top, right, bottom).
+                   If None, the entire screen will be captured.
+    :type region: tuple | None
+    :return: A NumPy array representing the captured image.
+    :rtype: numpy.ndarray
+    """
+    screen = ImageGrab.grab(bbox=region)
+    return np.array(screen)
+
+
 def click(x, y):
     win32api.SetCursorPos((x, y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
