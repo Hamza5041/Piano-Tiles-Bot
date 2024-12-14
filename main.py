@@ -2,6 +2,9 @@ import time
 import win32api, win32con
 import keyboard
 import pyautogui
+import numpy as np
+from PIL import ImageGrab
+import cv2
 
 height = 400
 rgb = 0 #0 for red, 1 for green, 2 for blue
