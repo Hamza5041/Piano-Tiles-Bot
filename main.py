@@ -57,11 +57,10 @@ def click(x, y):
 
 
 
-def color_checker(x,y):
-    # if pyautogui.pixel(x, y)[2] > 27 and pyautogui.pixel(x, y)[2] < 98 and pyautogui.pixel(x, y)[1] > 15 and pyautogui.pixel(x, y)[1] < 52 and pyautogui.pixel(x, y)[0] > 4 and pyautogui.pixel(x, y)[0] < 18:
-    if pyautogui.pixel(x, y)[rgb] == 0:
-        return True
-    return False
+def color_checker(x,y, rgb_channel=0, threshold=10):
+    pixelColor = pyautogui.pixel(x, y)[rgb_channel] # get the specific value
+    # return true, if the color is within the threshold (10)
+    return pixelColor <= threshold
 
 
 
