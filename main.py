@@ -6,9 +6,9 @@ import numpy as np
 from PIL import ImageGrab
 import cv2
 
-height = 400
 rgb = 0 #0 for red, 1 for green, 2 for blue
-
+num_tiles = 4
+screen_width, screen_height = pyautogui.size()
 
 def capture_screen(region = None):
     """
@@ -27,32 +27,43 @@ def capture_screen(region = None):
     return np.array(screen)
 
 
-def detect_black_tiles(screen, rgb, tolerance=10):
+def detect_black_tiles(screen, tolerance=10):
     """
            Detects the tiles based on their colors in a portion of the screen.
            Returns the positions (`x`, `y`) of the black tiles.
     """
     # initialize the upper and lower bounds
-    lowerBound = np.array([rgb - tolerance, rgb - tolerance, rgb - tolerance])
-    upperBound = np.array([rgb + tolerance, rgb + tolerance, rgb + tolerance])
+    lowerBound = np.array([0,0,0])
+    upperBound = np.array([tolerance, tolerance, tolerance]) # upper bound will be the range which it will accept tile colors. So within a value of 10 from 0(pure black)
     mask = cv2.inRange(screen, lowerBound, upperBound) # mask for color range
     positions = np.where(mask == 255) # get positions of black tiles
     # zip the x and y position of the tile and return
-    return zip(positions[1], positions[0])
+    return list(zip(positions[1], positions[0]))
 
+
+def get_column_positions(num_tiles, screen_width):
+    """
+    Dynamically calculates the position of the tiles on x0-axis in case screen resolution changes.
+    """
+    spacing = screen_width // (num_tiles + 1)
+    positions = []
+    for i in range (1, num_tiles + 1):
+        positions.append(i * spacing)
+    return positions
 
 
 def click(x, y):
-    win32api.SetCursorPos((x, y))
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
-    time.sleep(0.01)
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
+    pyautogui.click(x, y)
+
+
 
 def color_checker(x,y):
     # if pyautogui.pixel(x, y)[2] > 27 and pyautogui.pixel(x, y)[2] < 98 and pyautogui.pixel(x, y)[1] > 15 and pyautogui.pixel(x, y)[1] < 52 and pyautogui.pixel(x, y)[0] > 4 and pyautogui.pixel(x, y)[0] < 18:
     if pyautogui.pixel(x, y)[rgb] == 0:
         return True
     return False
+
+
 
 def hold_left_click(x, y):
     win32api.SetCursorPos((x, y))
