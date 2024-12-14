@@ -27,6 +27,21 @@ def capture_screen(region = None):
     return np.array(screen)
 
 
+def detect_black_tiles(screen, rgb, tolerance=10):
+    """
+           Detects the tiles based on their colors in a portion of the screen.
+           Returns the positions (`x`, `y`) of the black tiles.
+    """
+    # initialize the upper and lower bounds
+    lowerBound = np.array([rgb - tolerance, rgb - tolerance, rgb - tolerance])
+    upperBound = np.array([rgb + tolerance, rgb + tolerance, rgb + tolerance])
+    mask = cv2.inRange(screen, lowerBound, upperBound) # mask for color range
+    positions = np.where(mask == 255) # get positions of black tiles
+    # zip the x and y position of the tile and return
+    return zip(positions[1], positions[0])
+
+
+
 def click(x, y):
     win32api.SetCursorPos((x, y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
