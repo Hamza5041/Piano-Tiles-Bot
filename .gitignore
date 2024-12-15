@@ -3,3 +3,5 @@
 env
 myenv
 .myenv
+__pycache__/
+Screenshot 2024-12-14 192052.png
