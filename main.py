@@ -3,6 +3,7 @@ import time
 import win32api, win32con
 import keyboard
 import pyautogui
+import math
 
 rgb = 0 #0 for red, 1 for green, 2 for blue
 screen_width, screen_height = pyautogui.size()
@@ -30,15 +31,25 @@ def move_mouse(x, y):
     Move the mouse to (x, y) with small intermediate steps to simulate a human-like movement.
     """
     currentX, currentY = win32api.GetCursorPos()
-    # steps will be a random value which the cursor will move in (intermediate x,y)
-    steps = random.randint(10,40)
-    for i in range(steps):
-        # using the random value, slowly move towards the tile
-        intermediate_x = currentX + (x - currentX) * i // steps
-        intermediate_y = currentY + (y - currentY) * i // steps
+    distance = math.sqrt((x - currentX) ** 2 + (y - currentY) ** 2)
+
+    # Adjust steps based on distance
+    steps = min(max(int(distance / 10), 50), 150)
+
+    # Calculate the time for the entire movement
+    total_time = random.uniform(0.005, 0.01)
+    sleep_time = total_time / (steps * 20)
+
+    for i in range(1, steps + 1):
+        # Use easing function for more natural movement
+        progress = i / steps
+        ease = math.sin(progress * math.pi / 2)
+
+        intermediate_x = int(currentX + (x - currentX) * ease)
+        intermediate_y = int(currentY + (y - currentY) * ease)
+
         win32api.SetCursorPos((intermediate_x, intermediate_y))
-        # time.sleep(random.uniform(0.0001, 0.0003))
-    win32api.SetCursorPos((x, y))
+        time.sleep(sleep_time)
 
 def click(x, y):
     win32api.SetCursorPos((x, y))
