@@ -50,33 +50,13 @@ def piano_ai():
         for tile_x in tile_x_positions:
             # Check the color of the tile at this position
             if color_checker(tile_x, tile_y_position):
-                click(tile_x, tile_y_position)
+                hold_left_click(tile_x, tile_y_position)
                 break  # Break after clicking to prevent multiple clicks in one loop
 
         # Exit if 'q' is pressed
         if keyboard.is_pressed('q'):
             break
-    # while not keyboard.is_pressed('q'):
-    #     if color_checker(600, height):
-    #         click(600, height)
-    #     elif color_checker(760, height):
-    #         click(760, height)
-    #     elif color_checker(920, height):
-    #         click(920, height)
-    #     elif color_checker(1080, height):
-    #         click(1080, height)
-    #
-    #     if keyboard.is_pressed('q') == True:
-    #         break
 
-        # if color_checker(600, height):
-        #     hold_left_click(600, height)
-        # elif color_checker(760, height):
-        #     hold_left_click(760, height)
-        # elif color_checker(920, height):
-        #     hold_left_click(920, height)
-        # elif color_checker(1080, height):
-        #     hold_left_click(1080, height)
 
 keyboard.add_hotkey('a', piano_ai)
 keyboard.add_hotkey('s', piano_ai)
