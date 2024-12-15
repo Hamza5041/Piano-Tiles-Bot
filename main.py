@@ -27,26 +27,26 @@ def hold_left_click(x, y):
 
 def piano_ai():
     while not keyboard.is_pressed('q'):
-        # if color_checker(600, height):
-        #     click(600, height)
-        # elif color_checker(760, height):
-        #     click(760, height)q
-        # elif color_checker(920, height):
-        #     click(920, height)
-        # elif color_checker(1080, height):
-        #     click(1080, height)
-
-        # if keyboard.is_pressed('q') == True:
-        #     break
-
         if color_checker(600, height):
-            hold_left_click(600, height)
+            click(600, height)
         elif color_checker(760, height):
-            hold_left_click(760, height)
+            click(760, height)
         elif color_checker(920, height):
-            hold_left_click(920, height)
+            click(920, height)
         elif color_checker(1080, height):
-            hold_left_click(1080, height)
+            click(1080, height)
+
+        if keyboard.is_pressed('q') == True:
+            break
+
+        # if color_checker(600, height):
+        #     hold_left_click(600, height)
+        # elif color_checker(760, height):
+        #     hold_left_click(760, height)
+        # elif color_checker(920, height):
+        #     hold_left_click(920, height)
+        # elif color_checker(1080, height):
+        #     hold_left_click(1080, height)
 
 keyboard.add_hotkey('a', piano_ai)
 keyboard.add_hotkey('s', piano_ai)
