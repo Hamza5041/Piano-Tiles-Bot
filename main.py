@@ -7,8 +7,9 @@ import math
 
 rgb = 0 #0 for red, 1 for green, 2 for blue
 screen_width, screen_height = pyautogui.size()
-game_left_proportion = 0.35  # 35% from the left (adjust if needed)
-game_right_proportion = 0.65# 65% from the left (adjust if needed)
+game_left_proportion = 0.324  # 35% from the left (adjust if needed)
+game_right_proportion = 0.675# 65% from the left (adjust if needed)
+mouse_displacement = 65  # Displacement from the center of the tile to click
 
 # Calculate the exact boundaries of the playable area
 game_left = int(screen_width * game_left_proportion)
@@ -23,31 +24,34 @@ tile_x_positions = [
 ]
 
 # Calculate the y-position dynamically (using a fixed proportion for height)
-tile_y_position = int(screen_height * 0.8)  # Adjust based on where tiles fall (e.g., 80% of height)
+tile_y_position = int(screen_height * 0.47)  # Adjust based on where tiles fall (e.g., 80% of height)
 
 
 def move_mouse(x, y):
     """
     Move the mouse to (x, y) with small intermediate steps to simulate a human-like movement.
     """
+    x = random.randint(x - mouse_displacement, x + mouse_displacement)
+    y = random.randint(y, y + mouse_displacement)
     currentX, currentY = win32api.GetCursorPos()
-    distance = math.sqrt((x - currentX) ** 2 + (y - currentY) ** 2)
 
+    distance = math.sqrt((x - currentX)**2 + (y - currentY)**2)
+    
     # Adjust steps based on distance
-    steps = min(max(int(distance / 10), 50), 150)
-
+    steps = min(max(int(distance / 10), 52), 120)
+    
     # Calculate the time for the entire movement
-    total_time = random.uniform(0.005, 0.01)
-    sleep_time = total_time / (steps * 20)
-
+    # total_time = random.uniform(0.005, 0.015)
+    sleep_time = random.uniform(0.005, 0.015) / steps
+    
     for i in range(1, steps + 1):
         # Use easing function for more natural movement
         progress = i / steps
-        ease = math.sin(progress * math.pi / 2)
-
+        ease = math.sin(progress * 3.1415 / 2)
+        
         intermediate_x = int(currentX + (x - currentX) * ease)
         intermediate_y = int(currentY + (y - currentY) * ease)
-
+        
         win32api.SetCursorPos((intermediate_x, intermediate_y))
         time.sleep(sleep_time)
 
