@@ -1,3 +1,4 @@
+import random
 import time
 import win32api, win32con
 import keyboard
@@ -23,11 +24,29 @@ tile_x_positions = [
 # Calculate the y-position dynamically (using a fixed proportion for height)
 tile_y_position = int(screen_height * 0.8)  # Adjust based on where tiles fall (e.g., 80% of height)
 
+
+def move_mouse(x, y):
+    """
+    Move the mouse to (x, y) with small intermediate steps to simulate a human-like movement.
+    """
+    currentX, currentY = win32api.GetCursorPos()
+    # steps will be a random value which the cursor will move in (intermediate x,y)
+    steps = random.randint(10,40)
+    for i in range(steps):
+        # using the random value, slowly move towards the tile
+        intermediate_x = currentX + (x - currentX) * i // steps
+        intermediate_y = currentY + (y - currentY) * i // steps
+        win32api.SetCursorPos((intermediate_x, intermediate_y))
+        # time.sleep(random.uniform(0.0001, 0.0003))
+    win32api.SetCursorPos((x, y))
+
 def click(x, y):
     win32api.SetCursorPos((x, y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
     time.sleep(0.01)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
+
+
 
 def color_checker(x,y):
     # if pyautogui.pixel(x, y)[2] > 27 and pyautogui.pixel(x, y)[2] < 98 and pyautogui.pixel(x, y)[1] > 15 and pyautogui.pixel(x, y)[1] < 52 and pyautogui.pixel(x, y)[0] > 4 and pyautogui.pixel(x, y)[0] < 18:
@@ -35,12 +54,16 @@ def color_checker(x,y):
         return True
     return False
 
+
+
 def hold_left_click(x, y):
-    win32api.SetCursorPos((x, y))
+    move_mouse(x, y)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
     while color_checker (x,y):
         time.sleep(0.001)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
+
+
 
 def piano_ai():
     """
@@ -51,11 +74,16 @@ def piano_ai():
             # Check the color of the tile at this position
             if color_checker(tile_x, tile_y_position):
                 hold_left_click(tile_x, tile_y_position)
+                # time.sleep(random.uniform(0.001, 0.003))
                 break  # Break after clicking to prevent multiple clicks in one loop
 
+        # if random.random() < 0.02:
+        #     time.sleep(0.005)
         # Exit if 'q' is pressed
         if keyboard.is_pressed('q'):
             break
+
+
 
 
 keyboard.add_hotkey('a', piano_ai)
