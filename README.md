@@ -16,6 +16,15 @@ This is a simple Python bot that automates gameplay for the **Piano Tiles** game
 You can play the game here:  
 🔗 [Magic Tiles Piano Squid Game](https://magictiles3.co/magic-tiles-piano-squid)
 
+1) Make sure to run the program in the background via:
+```bash
+python.exe main.py
+```
+2) Then full screen the piano tiles game.
+3) Press either `A`, `S`, `D`, or `F` keys to start the program.
+4) Press the play button on the piano tiles game and watch
+5) You can Press `Q` at any time to stop the program
+
 ---
 
 ## 📋 Requirements  
