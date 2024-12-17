@@ -44,7 +44,7 @@ def move_mouse(x, y):
     for i in range(1, steps + 1):
         # Use easing function for more natural movement
         progress = i / steps
-        naturalify = math.sin(progress * 3.1415 / 2) #adding a sin function to make it more natural, slows down towards the end
+        naturalify = math.sin(progress * math.pi / 2) #adding a sin function to make it more natural, slows down towards the end
         
         next_x = int(currentX + (x - currentX) * naturalify)
         next_y = int(currentY + (y - currentY) * naturalify)
