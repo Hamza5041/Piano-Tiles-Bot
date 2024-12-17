@@ -7,9 +7,9 @@ import math
 
 rgb = 0 #0 for red, 1 for green, 2 for blue
 screen_width, screen_height = pyautogui.size()
-game_left_proportion = 0.324  # 35% from the left (adjust if needed)
-game_right_proportion = 0.675# 65% from the left (adjust if needed)
-mouse_displacement = 65  # Displacement from the center of the tile to click
+game_left_proportion = 0.35  # 35% from the left (adjust if needed)
+game_right_proportion = 0.65# 65% from the left (adjust if needed)
+mouse_displacement = 50  # Displacement from the center of the tile to click
 
 # Calculate the exact boundaries of the playable area
 game_left = int(screen_width * game_left_proportion)
@@ -58,7 +58,7 @@ def move_mouse(x, y):
 def click(x, y):
     win32api.SetCursorPos((x, y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
-    time.sleep(0.01)
+    time.sleep(0.001)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
 
 
