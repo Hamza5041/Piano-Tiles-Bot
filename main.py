@@ -32,12 +32,10 @@ def move_mouse(x, y):
     y = random.randint(y, y + mouse_displacement) #doing subtraction place the mouse too far up
     currentX, currentY = win32api.GetCursorPos()
 
-    #cal distance square root((x1-x2)^2, (y1-y2)^2), then use pythagorean theorem to find the distance
+    #cal distance square root((x2-x1)^2 + (y2-y1)^2)
     distance = ((x - currentX)**2 + (y - currentY)**2)**0.5
-    
     # number of times the mouse will move which is steps
-    steps = min(max((distance / 10)//1, 60), 120)
-
+    steps = min(max(int(distance / 10), 60), 120)
     # Calculate the time for the entire movement
     sleep_time = random.uniform(0.005, 0.015) / steps
     
