@@ -36,7 +36,7 @@ def move_mouse(x, y):
     distance = ((x - currentX)**2 + (y - currentY)**2)**0.5
     
     # number of times the mouse will move which is steps
-    steps = min(max((distance / 10)//1, 52), 120)
+    steps = min(max((distance / 10)//1, 60), 120)
 
     # Calculate the time for the entire movement
     sleep_time = random.uniform(0.005, 0.015) / steps
